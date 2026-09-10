@@ -1,0 +1,15 @@
+# Web Framework & Server
+fastapi==0.115.8
+uvicorn==0.34.0
+jinja2==3.1.5
+python-multipart==0.0.20
+pydantic-settings==2.7.1
+
+# ML Inference & Data Processing (Minimal versi yang mendukung Python 3.13)
+scikit-learn==1.6.1
+joblib==1.4.2
+pandas==2.2.3
+numpy==2.2.2
+
+# External API
+google-api-python-client==2.160.0

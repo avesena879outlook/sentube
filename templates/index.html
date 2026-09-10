@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sentube</title>
+        <meta
+            name="description"
+            content="YouTube sentiment analysis powered by SVM and mRMR feature selection."
+        />
+        <!-- Tailwind CSS v4 CDN -->
+        <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+        <!-- Google Fonts: Space Grotesk + Space Mono -->
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap"
+            rel="stylesheet"
+        />
+        <!-- Lucide Icons CDN -->
+        <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+        <!-- Alpine AJAX -->
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/@imacrayon/alpine-ajax@0.12.2/dist/cdn.min.js"
+        ></script>
+        <!-- Alpine.js -->
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"
+        ></script>
+        <style type="text/tailwindcss">
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: "Space Grotesk", sans-serif;
+                background-color: #f5f0e8;
+                background-image: radial-gradient(#c8c0b0 1px, transparent 1px);
+                background-size: 24px 24px;
+                min-height: 100vh;
+                color: #111;
+            }
+
+            .card {
+                background: #fff;
+                border: 3px solid #111;
+                box-shadow: 6px 6px 0 #111;
+                border-radius: 16px;
+            }
+
+            .card-dark {
+                background: #111;
+                border: 3px solid #111;
+                box-shadow: 6px 6px 0 #444;
+                border-radius: 16px;
+                color: #f5f0e8;
+            }
+
+            .btn {
+                border: 3px solid #111;
+                box-shadow: 4px 4px 0 #111;
+                border-radius: 10px;
+                font-weight: 700;
+                font-family: "Space Grotesk", sans-serif;
+                transition: all 0.1s ease;
+                cursor: pointer;
+            }
+
+            .btn:hover {
+                transform: translate(-2px, -2px);
+                box-shadow: 6px 6px 0 #111;
+            }
+
+            .btn:active {
+                transform: translate(2px, 2px);
+                box-shadow: 2px 2px 0 #111;
+            }
+
+            .btn-black {
+                background: #111;
+                color: #f5f0e8;
+            }
+
+            .btn-white {
+                background: #fff;
+                color: #111;
+            }
+
+            .tab-btn {
+                border: 2px solid #111;
+                border-radius: 8px;
+                font-weight: 700;
+                font-size: 0.875rem;
+                transition: all 0.15s ease;
+                cursor: pointer;
+            }
+
+            .tab-btn.active {
+                background: #111;
+                color: #f5f0e8;
+                box-shadow: 3px 3px 0 #555;
+            }
+
+            .tab-btn:not(.active) {
+                background: transparent;
+                color: #555;
+            }
+
+            .tab-btn:not(.active):hover {
+                background: #eee;
+            }
+
+            .cartoon-input {
+                border: 3px solid #111;
+                border-radius: 10px;
+                background: #f5f0e8;
+                font-family: "Space Grotesk", sans-serif;
+                font-size: 1rem;
+                color: #111;
+                padding: 0.875rem 1.25rem;
+                width: 100%;
+                outline: none;
+                transition: box-shadow 0.15s ease;
+            }
+
+            .cartoon-input:focus {
+                box-shadow: 4px 4px 0 #111;
+            }
+
+            .cartoon-input::placeholder {
+                color: #999;
+            }
+
+            .upload-zone {
+                border: 3px dashed #aaa;
+                border-radius: 12px;
+                background: #f5f0e8;
+                transition: all 0.15s ease;
+                cursor: pointer;
+                position: relative;
+            }
+
+            .upload-zone:hover {
+                border-color: #111;
+                background: #ece8e0;
+            }
+
+            .dot-decoration {
+                border-radius: 50%;
+                display: inline-block;
+                transition: all 0.2s ease;
+            }
+        </style>
+    </head>
+
+    <body
+        x-data="{ tab: 'youtube', filename: '' }"
+        class="flex flex-col items-center justify-start p-6 pt-16 pb-24"
+    >
+        <!-- Header -->
+        <header class="w-full max-w-2xl mb-10 text-center">
+            <div class="inline-flex items-center gap-2 mb-4">
+                <span
+                    class="dot-decoration"
+                    :class="tab === 'youtube' ? 'w-3 h-3 bg-[#111]' : 'w-2 h-2 bg-[#888]'"
+                ></span>
+                <span
+                    class="dot-decoration"
+                    :class="tab === 'csv' ? 'w-3 h-3 bg-[#111]' : 'w-2 h-2 bg-[#888]'"
+                ></span>
+            </div>
+            <h1
+                class="text-6xl font-extrabold tracking-tighter leading-none mb-3"
+                style="
+                    font-family: &quot;Space Mono&quot;, monospace;
+                    letter-spacing: -3px;
+                "
+            >
+                SENTUBE
+            </h1>
+            <p
+                class="text-base font-medium text-gray-500 uppercase tracking-widest"
+            >
+                YouTube · Sentiment · SVM + mRMR
+            </p>
+        </header>
+
+        <!-- Main Card -->
+        <div class="w-full max-w-2xl">
+            <div class="card p-8 mb-6">
+                <!-- Tabs -->
+                <div
+                    class="flex gap-3 mb-8 p-1"
+                    style="
+                        background: #f5f0e8;
+                        border: 2px solid #111;
+                        border-radius: 10px;
+                    "
+                >
+                    <button
+                        id="tab-youtube-btn"
+                        @click="tab = 'youtube'"
+                        :class="tab === 'youtube' ? 'active' : ''"
+                        class="tab-btn flex-1 py-2.5 px-4 flex items-center justify-center gap-2"
+                    >
+                        <i data-lucide="youtube" class="w-4 h-4"></i>
+                        YouTube / Keyword
+                    </button>
+                    <button
+                        id="tab-csv-btn"
+                        @click="tab = 'csv'"
+                        :class="tab === 'csv' ? 'active' : ''"
+                        class="tab-btn flex-1 py-2.5 px-4 flex items-center justify-center gap-2"
+                    >
+                        <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
+                        Upload CSV
+                    </button>
+                </div>
+
+                <!-- YouTube Form -->
+                <form
+                    x-show="tab === 'youtube'"
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 translate-y-2"
+                    x-transition:enter-end="opacity-100 translate-y-0"
+                    action="/analyze/youtube"
+                    method="POST"
+                    x-target="result-container"
+                    id="youtube-form"
+                    class="space-y-5"
+                >
+                    <div>
+                        <label
+                            class="block text-sm font-bold uppercase tracking-wider mb-2 text-gray-600"
+                        >
+                            Search Keyword or Video URL
+                        </label>
+                        <input
+                            type="text"
+                            id="keyword-input"
+                            name="keyword"
+                            required
+                            placeholder="e.g. Tutorial FastAPI Indonesia"
+                            class="cartoon-input"
+                        />
+                    </div>
+
+                    <button
+                        id="analyze-youtube-btn"
+                        type="submit"
+                        class="btn btn-black w-full py-4 flex items-center justify-center gap-2 text-base"
+                    >
+                        <i data-lucide="search" class="w-5 h-5"></i>
+                        Analyze Sentiments
+                    </button>
+                </form>
+
+                <!-- CSV Form -->
+                <form
+                    x-show="tab === 'csv'"
+                    style="display: none"
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 translate-y-2"
+                    x-transition:enter-end="opacity-100 translate-y-0"
+                    action="/analyze/csv"
+                    method="POST"
+                    x-target="result-container"
+                    enctype="multipart/form-data"
+                    id="csv-form"
+                    class="space-y-5"
+                >
+                    <div>
+                        <label
+                            class="block text-sm font-bold uppercase tracking-wider mb-2 text-gray-600"
+                        >
+                            Upload File CSV
+                        </label>
+                        <div class="upload-zone p-10 text-center">
+                            <input
+                                type="file"
+                                id="csv-file-input"
+                                name="file"
+                                accept=".csv"
+                                required
+                                @change="filename = $event.target.files[0]?.name || ''"
+                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                            />
+                            <div class="pointer-events-none">
+                                <i
+                                    data-lucide="upload-cloud"
+                                    class="w-12 h-12 mx-auto mb-3 text-gray-400"
+                                ></i>
+                                <p
+                                    class="font-bold text-gray-700"
+                                    x-text="filename || 'Klik atau drag & drop file CSV'"
+                                ></p>
+                                <p
+                                    class="text-xs text-gray-400 mt-1"
+                                    style="
+                                        font-family:
+                                            &quot;Space Mono&quot;, monospace;
+                                    "
+                                >
+                                    Kolom wajib: <strong>text</strong>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button
+                        id="analyze-csv-btn"
+                        type="submit"
+                        class="btn btn-black w-full py-4 flex items-center justify-center gap-2 text-base"
+                    >
+                        <i data-lucide="cpu" class="w-5 h-5"></i>
+                        Process Batch Data
+                    </button>
+                </form>
+            </div>
+
+            <!-- Result Container -->
+            <div id="result-container">
+                <!-- Injected by Alpine AJAX -->
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer
+            class="mt-12 text-center text-xs text-gray-400 uppercase tracking-widest"
+            style="font-family: &quot;Space Mono&quot;, monospace"
+        >
+            SVM · mRMR · FastAPI · Alpine AJAX
+        </footer>
+
+        <script>
+            lucide.createIcons();
+        </script>
+    </body>
+</html>

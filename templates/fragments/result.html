@@ -1,0 +1,358 @@
+<div id="result-container" class="hasil-wrap">
+    <!-- Header bar -->
+    <div class="hasil-header">
+        <div class="hasil-title-group">
+            <span class="hasil-label">OUTPUT</span>
+            <h2 class="hasil-title">Analysis Results</h2>
+        </div>
+        <div class="hasil-badge">
+            <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+            Completed
+        </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="stat-grid">
+        <div class="stat-card stat-pos">
+            <div class="stat-icon-wrap">
+                <i data-lucide="thumbs-up" class="w-5 h-5"></i>
+            </div>
+            <div class="stat-num">{{ results.summary.positive }}%</div>
+            <div class="stat-name">Positive</div>
+        </div>
+        <div class="stat-card stat-neu">
+            <div class="stat-icon-wrap">
+                <i data-lucide="minus-circle" class="w-5 h-5"></i>
+            </div>
+            <div class="stat-num">{{ results.summary.neutral }}%</div>
+            <div class="stat-name">Neutral</div>
+        </div>
+        <div class="stat-card stat-neg">
+            <div class="stat-icon-wrap">
+                <i data-lucide="thumbs-down" class="w-5 h-5"></i>
+            </div>
+            <div class="stat-num">{{ results.summary.negative }}%</div>
+            <div class="stat-name">Negative</div>
+        </div>
+    </div>
+
+    <!-- Bottom Section -->
+    <div class="bottom-grid">
+        <!-- mRMR Features -->
+        <div class="panel">
+            <div class="panel-header">
+                <i data-lucide="filter" class="w-4 h-4"></i>
+                <span>Top mRMR Features</span>
+            </div>
+            <div class="features-wrap">
+                {% for feature in results.top_features %}
+                <span class="feature-chip">{{ feature }}</span>
+                {% endfor %}
+            </div>
+            <p class="panel-footer">
+                Dimensi direduksi dengan Maximum Relevance Minimum Redundancy.
+            </p>
+        </div>
+
+        <!-- SVM Samples -->
+        <div class="panel">
+            <div class="panel-header">
+                <i data-lucide="message-square-text" class="w-4 h-4"></i>
+                <span>Sample Classification</span>
+            </div>
+            <div class="comments-wrap">
+                {% for comment in results.sample_comments %}
+                <div class="comment-card">
+                    <p class="comment-text">"{{ comment.text }}"</p>
+                    <span
+                        class="sentiment-badge {% if comment.sentiment == 'Positive' %}badge-pos {% elif comment.sentiment == 'Negative' %}badge-neg {% else %}badge-neu{% endif %}"
+                    >
+                        {% if comment.sentiment == 'Positive' %}<i
+                            data-lucide="thumbs-up"
+                            class="w-3 h-3"
+                        ></i>
+                        {% elif comment.sentiment == 'Negative' %}<i
+                            data-lucide="thumbs-down"
+                            class="w-3 h-3"
+                        ></i>
+                        {% else %}<i data-lucide="minus" class="w-3 h-3"></i>{%
+                        endif %} {{ comment.sentiment }}
+                    </span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(16px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .hasil-wrap {
+        animation: slideUp 0.35s ease-out forwards;
+    }
+
+    /* Header */
+    .hasil-header {
+        background: #111;
+        border: 3px solid #111;
+        box-shadow: 6px 6px 0 #444;
+        border-radius: 14px;
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        color: #f5f0e8;
+    }
+
+    .hasil-title-group {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .hasil-label {
+        font-family: "Space Mono", monospace;
+        font-size: 0.6rem;
+        letter-spacing: 0.3em;
+        color: #888;
+        text-transform: uppercase;
+    }
+
+    .hasil-title {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 1.4rem;
+        font-weight: 800;
+        margin: 0;
+    }
+
+    .hasil-badge {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        border: 2px solid #444;
+        border-radius: 8px;
+        padding: 0.4rem 0.8rem;
+        color: #f5f0e8;
+        background: #222;
+    }
+
+    /* Stat grid */
+    .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .stat-card {
+        background: #fff;
+        border: 3px solid #111;
+        box-shadow: 4px 4px 0 #111;
+        border-radius: 14px;
+        padding: 1.25rem 1rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        transition:
+            transform 0.1s,
+            box-shadow 0.1s;
+    }
+
+    .stat-card:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0 #111;
+    }
+
+    .stat-icon-wrap {
+        width: 36px;
+        height: 36px;
+        border: 2px solid #111;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 4px;
+    }
+
+    .stat-pos .stat-icon-wrap {
+        background: #111;
+        color: #f5f0e8;
+    }
+    .stat-neu .stat-icon-wrap {
+        background: #f5f0e8;
+        color: #111;
+    }
+    .stat-neg .stat-icon-wrap {
+        background: #111;
+        color: #f5f0e8;
+    }
+
+    .stat-num {
+        font-family: "Space Mono", monospace;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #111;
+        line-height: 1;
+    }
+
+    .stat-name {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #777;
+    }
+
+    /* Bottom grid */
+    .bottom-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+
+    @media (max-width: 640px) {
+        .bottom-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Panel */
+    .panel {
+        background: #fff;
+        border: 3px solid #111;
+        box-shadow: 4px 4px 0 #111;
+        border-radius: 14px;
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .panel-header {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: 800;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 2px solid #111;
+        padding-bottom: 0.75rem;
+        color: #111;
+    }
+
+    .panel-footer {
+        font-family: "Space Mono", monospace;
+        font-size: 0.65rem;
+        color: #aaa;
+        border-top: 2px dashed #ddd;
+        padding-top: 0.75rem;
+        margin-top: auto;
+    }
+
+    /* Feature chips */
+    .features-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .feature-chip {
+        display: inline-block;
+        border: 2px solid #111;
+        border-radius: 6px;
+        padding: 3px 10px;
+        font-family: "Space Mono", monospace;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #111;
+        background: #f5f0e8;
+        box-shadow: 2px 2px 0 #111;
+    }
+
+    /* Comments */
+    .comments-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        max-height: 260px;
+        overflow-y: auto;
+    }
+
+    .comments-wrap::-webkit-scrollbar {
+        width: 4px;
+    }
+    .comments-wrap::-webkit-scrollbar-track {
+        background: #f5f0e8;
+    }
+    .comments-wrap::-webkit-scrollbar-thumb {
+        background: #bbb;
+        border-radius: 4px;
+    }
+
+    .comment-card {
+        border: 2px solid #e0dbd0;
+        border-radius: 10px;
+        padding: 0.75rem;
+        background: #f9f7f2;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .comment-text {
+        font-size: 0.8rem;
+        color: #333;
+        font-style: italic;
+        line-height: 1.4;
+    }
+
+    /* Sentiment badge */
+    .sentiment-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-family: "Space Mono", monospace;
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border: 2px solid #111;
+        border-radius: 5px;
+        padding: 2px 8px;
+        align-self: flex-end;
+        box-shadow: 2px 2px 0 #111;
+    }
+
+    .badge-pos {
+        background: #111;
+        color: #f5f0e8;
+    }
+    .badge-neu {
+        background: #f5f0e8;
+        color: #111;
+    }
+    .badge-neg {
+        background: #555;
+        color: #f5f0e8;
+    }
+</style>
+
+<script>
+    if (window.lucide) lucide.createIcons();
+</script>
