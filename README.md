@@ -1,26 +1,40 @@
+# 📂 Struktur Proyek: SenTube
+
+Dokumentasi mengenai arsitektur dan organisasi direktori untuk proyek **SenTube**.
+
+---
+
+## 🌳 Pohon Direktori (Directory Tree)
+
+```text
 sentube/
-├── app/
-│   ├── __init__.py
-│   ├── config.py             # Settings & path artefak (.env)
-│   ├── main.py               # FastAPI entrypoint & Route handlers
-│   ├── ml_pipeline.py        # Class & fungsi Inference ML (Load & Predict)
-│   ├── preprocessor.py       # Fungsi pembersihan teks (Cleaning, Stemming/Stopwords)
-│   └── services.py           # Services: Handling Youtube Crawl & CSV Upload
-├── data/                     # Storage sementara file upload/crawl
-│   └── uploads/
-├── artifacts/                # Artefak Model ML dari Google Colab/Notebook
-│   ├── model_a_mrmr.joblib
-│   └── model_b_baseline.joblib
-├── notebooks/                # Tempat Eksperimen & Training Model
-│   ├── 01_crawl_and_prep.ipynb
-│   └── 02_training_svm_mrmr.ipynb
-├── templates/
-│   ├── fragments/            # HTML Fragment untuk Alpine AJAX
-│   │   ├── loading.html
-│   │   └── results.html
-│   └── index.html            # Layout Utama (Alpine.js)
-├── static/                   # File CSS/JS lokal (Opsional)
-├── .env                      # API Keys (YOUTUBE_API_KEY)
-├── .gitignore
-├── create_dummy_models.py    # Script pembuat dummy model agar app bisa di-run langsung
-└── requirements.txt
+├── 📁 app/                          # Core Application Code
+│   ├── 📄 __init__.py               # Python Package Initializer
+│   ├── ⚙️ config.py                 # Settings, Konfigurasi & Path Artefak (.env)
+│   ├── 🚀 main.py                   # FastAPI Entrypoint & Route Handlers
+│   ├── 🤖 ml_pipeline.py            # Inference ML (Load Model & Predict)
+│   ├── 🧹 preprocessor.py           # Text Preprocessing (Cleaning, Stemming, Stopwords)
+│   └── 🛠️ services.py               # Services (YouTube Crawler & CSV Handling)
+│
+├── 📁 artifacts/                    # Model ML Output (Colab / Training Result)
+│   ├── 📦 model_a_mrmr.joblib       # Model Utama (Feature Selection mRMR)
+│   └── 📦 model_b_baseline.joblib   # Model Baseline
+│
+├── 📁 data/                         # Temporary File Storage
+│   └── 📁 uploads/                  # Tempat Penyimpanan Sementara Upload/Crawl
+│
+├── 📁 notebooks/                    # Jupyter Notebooks (Eksperimen & Training)
+│   ├── 📓 01_crawl_and_prep.ipynb   # Exploration & Data Preparation
+│   └── 📓 02_training_svm_mrmr.ipynb # Training Model SVM + mRMR
+│
+├── 📁 templates/                    # Frontend HTML Templates (Jinja2)
+│   ├── 📁 fragments/                # HTML Fragments (Alpine AJAX)
+│   │   ├── 🧩 loading.html
+│   │   └── 🧩 results.html
+│   └── 📄 index.html                # Layout Utama (Alpine.js)
+│
+├── 📁 static/                       # Local Static Assets (CSS, JS, Images)
+│
+├── 📄 .env                          # Environment Variables (YouTube API Key)
+├── 📄 .gitignore                    # Git Ignore Rules
+└── 📄 create_dummy_models.py        # Script Generator Dummy Model untuk Local Run
