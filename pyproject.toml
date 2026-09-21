@@ -1,16 +1,31 @@
 [project]
 name = "sentube-thesis"
 version = "0.1.0"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.13"
 dependencies = [
     "fastapi==0.115.8",
     "google-api-python-client==2.160.0",
+    "ipykernel>=7.3.0",
     "jinja2==3.1.5",
     "joblib==1.4.2",
+    "matplotlib>=3.11.2",
     "numpy==2.2.2",
     "pandas==2.2.3",
     "pydantic-settings==2.7.1",
     "python-multipart==0.0.20",
+    "sastrawi>=1.0.1",
     "scikit-learn==1.6.1",
+    "scipy>=1.18.1",
+    "seaborn>=0.13.2",
+    "torch",
+    "transformers>=5.17.0",
     "uvicorn==0.34.0",
 ]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu118" }
+
+[[tool.uv.index]]
+name = "pytorch-cu118"
+url = "https://download.pytorch.org/whl/cu118"
+explicit = true

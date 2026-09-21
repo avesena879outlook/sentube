@@ -1,0 +1,14 @@
+-r requirements.txt
+
+# VS Code notebook runtime
+ipykernel
+
+# Experiment, visualization, and model evaluation
+matplotlib
+seaborn
+scipy
+
+# Optional: only needed for IndoBERT-assisted pre-labeling.
+# Verify that this installs a CUDA build of PyTorch before running IndoBERT.
+transformers
+torch

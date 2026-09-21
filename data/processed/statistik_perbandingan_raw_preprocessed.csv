@@ -1,0 +1,8 @@
+﻿metrik,raw,preprocessed,perubahan,perubahan_persen
+Jumlah komentar,12230.00,12230.00,0.00,0.00
+Total token,191346.00,149640.00,-41706.00,-21.80
+Kosakata unik,14431.00,10461.00,-3970.00,-27.51
+Rata-rata token per komentar,15.65,12.24,-3.41,-21.80
+Median token per komentar,12.00,9.00,-3.00,-25.00
+Persentil 95 token,38.00,29.00,-9.00,-23.68
+Maksimum token,320.00,230.00,-90.00,-28.12

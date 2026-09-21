@@ -1,0 +1,25 @@
+{
+  "input": "C:\\Users\\lenovo\\Documents\\Github\\sentube_thesis\\data\\raw\\yt\\merged\\dataset_coretax_youtube_raw_merged.csv",
+  "output": "C:\\Users\\lenovo\\Documents\\Github\\sentube_thesis\\data\\processed\\dataset_coretax_youtube_preprocessed.csv",
+  "rows_input": 12230,
+  "rows_output": 12230,
+  "columns_output": 22,
+  "status_counts": {
+    "valid": 12230
+  },
+  "duplicate_text_rows": 8,
+  "unique_tokens_before_stemming": 13384,
+  "unique_stems": 10463,
+  "empty_clean_text": 0,
+  "empty_preprocessed_text": 0,
+  "raw_word_count": {
+    "min": 5,
+    "median": 12.0,
+    "max": 320
+  },
+  "preprocessed_token_count": {
+    "min": 1,
+    "median": 9.0,
+    "max": 230
+  }
+}

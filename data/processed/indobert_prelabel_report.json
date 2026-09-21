@@ -1,0 +1,20 @@
+{
+  "input": "C:\\Users\\lenovo\\Documents\\Github\\sentube_thesis\\data\\processed\\dataset_coretax_youtube_preprocessed.csv",
+  "output": "C:\\Users\\lenovo\\Documents\\Github\\sentube_thesis\\data\\processed\\dataset_coretax_youtube_prelabel_indobert.csv",
+  "model": "tyqiangz/indobert-lite-large-p2-smsa",
+  "text_column": "komentar_clean",
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+  "rows_total": 12230,
+  "rows_predicted": 12230,
+  "label_counts": {
+    "negatif": 8546,
+    "netral": 2231,
+    "positif": 1453
+  },
+  "review_rows": 1505,
+  "review_percentage": 12.31,
+  "confidence_threshold": 0.8,
+  "margin_threshold": 0.3,
+  "elapsed_seconds": 64.14
+}
