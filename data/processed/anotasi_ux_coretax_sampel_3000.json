@@ -1,0 +1,20 @@
+{
+  "source": "/home/ubuntu/Developments/GitHub/sentube/data/processed/dataset_coretax_youtube_prelabel_indobert_ringkas.csv",
+  "source_sha256": "0e4516d7efe6fe3225adf344f9392c3729879b7d3b9d66ad5faba9cba8338220",
+  "sampling_method": "simple_random_without_replacement",
+  "seed": 42,
+  "source_rows": 12230,
+  "selected_rows": 3000,
+  "pilot_rows": 100,
+  "main_rows": 2900,
+  "pseudo_label_counts_for_sampling_audit": {
+    "positif": 384,
+    "netral": 532,
+    "negatif": 2084
+  },
+  "review_rows_for_sampling_audit": 359,
+  "output_files": {
+    "1": "/home/ubuntu/Developments/GitHub/sentube/data/processed/anotasi_ux_coretax_anotator_1_3000.csv",
+    "2": "/home/ubuntu/Developments/GitHub/sentube/data/processed/anotasi_ux_coretax_anotator_2_3000.csv"
+  }
+}
