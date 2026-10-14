@@ -52,19 +52,29 @@ def fetch_youtube_comments(keyword: str, max_results: int = 50) -> List[str]:
     return comments
 
 
-def parse_csv_dataset(file_contents: bytes) -> List[str]:
+def parse_csv_dataset(file_contents: bytes, text_column: str | None = None) -> List[str]:
     """Membaca file CSV yang di-upload user dan mengambil kolom teks."""
     df = pd.read_csv(io.BytesIO(file_contents))
 
     text_col = None
     possible_cols = ["text", "komentar", "comment", "tweet", "review", "content"]
 
-    for col in df.columns:
-        if col.lower() in possible_cols:
-            text_col = col
-            break
+    if text_column:
+        if text_column not in df.columns:
+            raise ValueError("Kolom komentar yang dipilih tidak ditemukan dalam CSV.")
+        text_col = text_column
 
     if not text_col:
-        text_col = df.select_dtypes(include=["object"]).columns[0]
+        for col in df.columns:
+            if col.lower() in possible_cols:
+                text_col = col
+                break
 
-    return df[text_col].dropna().astype(str).tolist()
+    if not text_col:
+        candidates = df.select_dtypes(include=["object"]).columns
+        if len(candidates) == 0:
+            raise ValueError("CSV tidak memiliki kolom teks. Pilih kolom komentar di editor CSV.")
+        text_col = candidates[0]
+
+    comments = df[text_col].dropna().astype(str).str.strip()
+    return comments[comments.ne("")].tolist()

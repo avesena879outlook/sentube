@@ -9,8 +9,8 @@ class Settings(BaseSettings):
     APP_ENV: str = "development"
     
     # Path Artefak Model
-    MODEL_A_PATH: Path = BASE_DIR / "artifacts" / "model_a_mrmr.joblib"
-    MODEL_B_PATH: Path = BASE_DIR / "artifacts" / "model_b_baseline.joblib"
+    MODEL_A_PATH: Path = BASE_DIR / "artifacts" / "svm_mrmr_fast.joblib"
+    MODEL_B_PATH: Path = BASE_DIR / "artifacts" / "svm_baseline_fast.joblib"
     
     class Config:
         env_file = BASE_DIR / ".env"

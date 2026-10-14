@@ -1,0 +1,148 @@
+{
+  "mode": "fast",
+  "preliminary": true,
+  "methodology_warning": "313 baris masih berstatus perlu_adjudikasi. Hasil tidak boleh dilaporkan sebagai eksperimen final sebelum status dikonfirmasi.",
+  "random_state": 42,
+  "cv_folds": 10,
+  "train_rows": 1475,
+  "test_rows": 369,
+  "train_distribution": {
+    "negatif": 1062,
+    "netral": 330,
+    "positif": 83
+  },
+  "test_distribution": {
+    "negatif": 266,
+    "netral": 82,
+    "positif": 21
+  },
+  "results": [
+    {
+      "model": "SVM tanpa mRMR",
+      "cv_macro_f1": 0.7964129204594336,
+      "test_accuracy": 0.8428184281842819,
+      "test_macro_f1": 0.8102337966672389,
+      "test_weighted_f1": 0.8473860583183696,
+      "train_seconds": 105.84390629990958,
+      "predict_seconds": 21.767513800179586,
+      "best_params": {
+        "svm__C": 1,
+        "svm__kernel": "linear"
+      },
+      "classification_report": {
+        "negatif": {
+          "precision": 0.9233870967741935,
+          "recall": 0.8609022556390977,
+          "f1-score": 0.8910505836575876,
+          "support": 266.0
+        },
+        "netral": {
+          "precision": 0.6435643564356436,
+          "recall": 0.7926829268292683,
+          "f1-score": 0.7103825136612022,
+          "support": 82.0
+        },
+        "positif": {
+          "precision": 0.85,
+          "recall": 0.8095238095238095,
+          "f1-score": 0.8292682926829268,
+          "support": 21.0
+        },
+        "accuracy": 0.8428184281842819,
+        "macro avg": {
+          "precision": 0.8056504844032791,
+          "recall": 0.8210363306640586,
+          "f1-score": 0.8102337966672389,
+          "support": 369.0
+        },
+        "weighted avg": {
+          "precision": 0.8570277641454153,
+          "recall": 0.8428184281842819,
+          "f1-score": 0.8473860583183696,
+          "support": 369.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          229,
+          34,
+          3
+        ],
+        [
+          17,
+          65,
+          0
+        ],
+        [
+          2,
+          2,
+          17
+        ]
+      ]
+    },
+    {
+      "model": "SVM + mRMR",
+      "cv_macro_f1": 0.7402119655760101,
+      "test_accuracy": 0.7859078590785907,
+      "test_macro_f1": 0.7421795021779043,
+      "test_weighted_f1": 0.7954620544100612,
+      "train_seconds": 37.51671680016443,
+      "predict_seconds": 0.0408092001453042,
+      "best_params": {
+        "mrmr__k": 100,
+        "svm__C": 1,
+        "svm__kernel": "linear"
+      },
+      "classification_report": {
+        "negatif": {
+          "precision": 0.9098712446351931,
+          "recall": 0.7969924812030075,
+          "f1-score": 0.8496993987975952,
+          "support": 266.0
+        },
+        "netral": {
+          "precision": 0.543859649122807,
+          "recall": 0.7560975609756098,
+          "f1-score": 0.6326530612244898,
+          "support": 82.0
+        },
+        "positif": {
+          "precision": 0.7272727272727273,
+          "recall": 0.7619047619047619,
+          "f1-score": 0.7441860465116279,
+          "support": 21.0
+        },
+        "accuracy": 0.7859078590785907,
+        "macro avg": {
+          "precision": 0.7270012070102426,
+          "recall": 0.7716649346944596,
+          "f1-score": 0.7421795021779043,
+          "support": 369.0
+        },
+        "weighted avg": {
+          "precision": 0.8181435489803761,
+          "recall": 0.7859078590785907,
+          "f1-score": 0.7954620544100612,
+          "support": 369.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          212,
+          50,
+          4
+        ],
+        [
+          18,
+          62,
+          2
+        ],
+        [
+          3,
+          2,
+          16
+        ]
+      ]
+    }
+  ]
+}

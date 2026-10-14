@@ -29,7 +29,7 @@ class MRMRSelector(BaseEstimator, TransformerMixin):
         n_samples = features.shape[0]
         feature_ones = np.asarray(features.sum(axis=0)).ravel()
         selected_ones = float(selected_column.sum())
-        both_one = np.asarray(features.T @ selected_column).ravel()
+        both_one = (features.T @ selected_column).toarray().ravel()
 
         counts = (
             both_one,

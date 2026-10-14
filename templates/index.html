@@ -1,339 +1,159 @@
 <!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Sentube</title>
-        <meta
-            name="description"
-            content="YouTube sentiment analysis powered by SVM and mRMR feature selection."
-        />
-        <!-- Tailwind CSS v4 CDN -->
-        <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-        <!-- Google Fonts: Space Grotesk + Space Mono -->
-        <link
-            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap"
-            rel="stylesheet"
-        />
-        <!-- Lucide Icons CDN -->
-        <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-        <!-- Alpine AJAX -->
-        <script
-            defer
-            src="https://cdn.jsdelivr.net/npm/@imacrayon/alpine-ajax@0.12.2/dist/cdn.min.js"
-        ></script>
-        <!-- Alpine.js -->
-        <script
-            defer
-            src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"
-        ></script>
-        <style type="text/tailwindcss">
-            * {
-                box-sizing: border-box;
-            }
-
-            body {
-                font-family: "Space Grotesk", sans-serif;
-                background-color: #f5f0e8;
-                background-image: radial-gradient(#c8c0b0 1px, transparent 1px);
-                background-size: 24px 24px;
-                min-height: 100vh;
-                color: #111;
-            }
-
-            .card {
-                background: #fff;
-                border: 3px solid #111;
-                box-shadow: 6px 6px 0 #111;
-                border-radius: 16px;
-            }
-
-            .card-dark {
-                background: #111;
-                border: 3px solid #111;
-                box-shadow: 6px 6px 0 #444;
-                border-radius: 16px;
-                color: #f5f0e8;
-            }
-
-            .btn {
-                border: 3px solid #111;
-                box-shadow: 4px 4px 0 #111;
-                border-radius: 10px;
-                font-weight: 700;
-                font-family: "Space Grotesk", sans-serif;
-                transition: all 0.1s ease;
-                cursor: pointer;
-            }
-
-            .btn:hover {
-                transform: translate(-2px, -2px);
-                box-shadow: 6px 6px 0 #111;
-            }
-
-            .btn:active {
-                transform: translate(2px, 2px);
-                box-shadow: 2px 2px 0 #111;
-            }
-
-            .btn-black {
-                background: #111;
-                color: #f5f0e8;
-            }
-
-            .btn-white {
-                background: #fff;
-                color: #111;
-            }
-
-            .tab-btn {
-                border: 2px solid #111;
-                border-radius: 8px;
-                font-weight: 700;
-                font-size: 0.875rem;
-                transition: all 0.15s ease;
-                cursor: pointer;
-            }
-
-            .tab-btn.active {
-                background: #111;
-                color: #f5f0e8;
-                box-shadow: 3px 3px 0 #555;
-            }
-
-            .tab-btn:not(.active) {
-                background: transparent;
-                color: #555;
-            }
-
-            .tab-btn:not(.active):hover {
-                background: #eee;
-            }
-
-            .cartoon-input {
-                border: 3px solid #111;
-                border-radius: 10px;
-                background: #f5f0e8;
-                font-family: "Space Grotesk", sans-serif;
-                font-size: 1rem;
-                color: #111;
-                padding: 0.875rem 1.25rem;
-                width: 100%;
-                outline: none;
-                transition: box-shadow 0.15s ease;
-            }
-
-            .cartoon-input:focus {
-                box-shadow: 4px 4px 0 #111;
-            }
-
-            .cartoon-input::placeholder {
-                color: #999;
-            }
-
-            .upload-zone {
-                border: 3px dashed #aaa;
-                border-radius: 12px;
-                background: #f5f0e8;
-                transition: all 0.15s ease;
-                cursor: pointer;
-                position: relative;
-            }
-
-            .upload-zone:hover {
-                border-color: #111;
-                background: #ece8e0;
-            }
-
-            .dot-decoration {
-                border-radius: 50%;
-                display: inline-block;
-                transition: all 0.2s ease;
-            }
-        </style>
-    </head>
-
-    <body
-        x-data="{ tab: 'youtube', filename: '' }"
-        class="flex flex-col items-center justify-start p-6 pt-16 pb-24"
-    >
-        <!-- Header -->
-        <header class="w-full max-w-2xl mb-10 text-center">
-            <div class="inline-flex items-center gap-2 mb-4">
-                <span
-                    class="dot-decoration"
-                    :class="tab === 'youtube' ? 'w-3 h-3 bg-[#111]' : 'w-2 h-2 bg-[#888]'"
-                ></span>
-                <span
-                    class="dot-decoration"
-                    :class="tab === 'csv' ? 'w-3 h-3 bg-[#111]' : 'w-2 h-2 bg-[#888]'"
-                ></span>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Dashboard klasifikasi sentimen Coretax dengan SVM dan mRMR." />
+    <title>SenTube | Dashboard</title>
+    <script>
+        try {
+            const savedTheme = localStorage.getItem("sentube-theme");
+            document.documentElement.dataset.theme = savedTheme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        } catch {
+            document.documentElement.dataset.theme = "light";
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', path='/dashboard.css') }}?v=10" />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script src="{{ url_for('static', path='/vendor/papaparse.min.js') }}"></script>
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar" aria-label="Navigasi utama">
+            <a class="brand" href="#overview" title="SenTube" aria-label="SenTube, ke ringkasan">
+                <span class="brand-mark"><i data-lucide="message-square-text"></i></span>
+                <span class="brand-name">SenTube</span>
+            </a>
+            <nav class="sidebar-nav">
+                <a class="nav-link active" href="#overview" title="Ringkasan" aria-label="Ringkasan"><i data-lucide="layout-dashboard"></i><span>Ringkasan</span></a>
+                <a class="nav-link" href="#analysis" title="Analisis" aria-label="Analisis"><i data-lucide="scan-text"></i><span>Analisis</span></a>
+                <a class="nav-link" href="#models" title="Model" aria-label="Model"><i data-lucide="chart-no-axes-combined"></i><span>Model</span></a>
+                <a class="nav-link" href="#dataset" title="Dataset" aria-label="Dataset"><i data-lucide="database"></i><span>Dataset</span></a>
+            </nav>
+            <div class="sidebar-foot" title="{{ 'Model aktif' if model_ready else 'Model tidak tersedia' }}" aria-label="{{ 'Model aktif' if model_ready else 'Model tidak tersedia' }}">
+                <span class="status-dot {{ 'online' if model_ready else 'offline' }}"></span>
             </div>
-            <h1
-                class="text-6xl font-extrabold tracking-tighter leading-none mb-3"
-                style="
-                    font-family: &quot;Space Mono&quot;, monospace;
-                    letter-spacing: -3px;
-                "
-            >
-                SENTUBE
-            </h1>
-            <p
-                class="text-base font-medium text-gray-500 uppercase tracking-widest"
-            >
-                YouTube · Sentiment · SVM + mRMR
-            </p>
-        </header>
+        </aside>
 
-        <!-- Main Card -->
-        <div class="w-full max-w-2xl">
-            <div class="card p-8 mb-6">
-                <!-- Tabs -->
-                <div
-                    class="flex gap-3 mb-8 p-1"
-                    style="
-                        background: #f5f0e8;
-                        border: 2px solid #111;
-                        border-radius: 10px;
-                    "
-                >
-                    <button
-                        id="tab-youtube-btn"
-                        @click="tab = 'youtube'"
-                        :class="tab === 'youtube' ? 'active' : ''"
-                        class="tab-btn flex-1 py-2.5 px-4 flex items-center justify-center gap-2"
-                    >
-                        <i data-lucide="youtube" class="w-4 h-4"></i>
-                        YouTube / Keyword
-                    </button>
-                    <button
-                        id="tab-csv-btn"
-                        @click="tab = 'csv'"
-                        :class="tab === 'csv' ? 'active' : ''"
-                        class="tab-btn flex-1 py-2.5 px-4 flex items-center justify-center gap-2"
-                    >
-                        <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
-                        Upload CSV
-                    </button>
+        <main class="main-content">
+            <header class="topbar">
+                <div class="topbar-path"><span>Workspace</span><i data-lucide="chevron-right"></i><strong>Dashboard</strong></div>
+                <div class="topbar-actions">
+                    <span class="topbar-status"><span class="status-dot {{ 'online' if model_ready else 'offline' }}"></span>{{ 'Model aktif' if model_ready else 'Model tidak tersedia' }}</span>
+                    <button id="theme-toggle" class="icon-button" type="button" title="Aktifkan mode gelap" aria-label="Aktifkan mode gelap" aria-pressed="false"><i data-lucide="moon"></i></button>
+                    <button class="icon-button" type="button" title="Muat ulang halaman" aria-label="Muat ulang halaman" onclick="window.location.reload()"><i data-lucide="refresh-cw"></i></button>
                 </div>
+            </header>
 
-                <!-- YouTube Form -->
-                <form
-                    x-show="tab === 'youtube'"
-                    x-transition:enter="transition ease-out duration-200"
-                    x-transition:enter-start="opacity-0 translate-y-2"
-                    x-transition:enter-end="opacity-100 translate-y-0"
-                    action="/analyze/youtube"
-                    method="POST"
-                    x-target="result-container"
-                    id="youtube-form"
-                    class="space-y-5"
-                >
-                    <div>
-                        <label
-                            class="block text-sm font-bold uppercase tracking-wider mb-2 text-gray-600"
-                        >
-                            Search Keyword or Video URL
-                        </label>
-                        <input
-                            type="text"
-                            id="keyword-input"
-                            name="keyword"
-                            required
-                            placeholder="e.g. Tutorial FastAPI Indonesia"
-                            class="cartoon-input"
-                        />
-                    </div>
+            <div class="page-heading">
+                <div>
+                    <p class="eyebrow">Klasifikasi sentimen Coretax</p>
+                    <h1>Dashboard Analisis</h1>
+                    <p class="page-subtitle">Eksperimen SVM baseline dan SVM dengan seleksi fitur mRMR.</p>
+                </div>
+                <span class="phase-badge"><i data-lucide="flask-conical"></i>Eksperimen awal</span>
+            </div>
 
-                    <button
-                        id="analyze-youtube-btn"
-                        type="submit"
-                        class="btn btn-black w-full py-4 flex items-center justify-center gap-2 text-base"
-                    >
-                        <i data-lucide="search" class="w-5 h-5"></i>
-                        Analyze Sentiments
-                    </button>
-                </form>
+            <div class="notice" role="status"><i data-lucide="info"></i><span>Model uji cepat sedang digunakan. Angka evaluasi belum menjadi hasil akhir skripsi.</span></div>
 
-                <!-- CSV Form -->
-                <form
-                    x-show="tab === 'csv'"
-                    style="display: none"
-                    x-transition:enter="transition ease-out duration-200"
-                    x-transition:enter-start="opacity-0 translate-y-2"
-                    x-transition:enter-end="opacity-100 translate-y-0"
-                    action="/analyze/csv"
-                    method="POST"
-                    x-target="result-container"
-                    enctype="multipart/form-data"
-                    id="csv-form"
-                    class="space-y-5"
-                >
-                    <div>
-                        <label
-                            class="block text-sm font-bold uppercase tracking-wider mb-2 text-gray-600"
-                        >
-                            Upload File CSV
-                        </label>
-                        <div class="upload-zone p-10 text-center">
-                            <input
-                                type="file"
-                                id="csv-file-input"
-                                name="file"
-                                accept=".csv"
-                                required
-                                @change="filename = $event.target.files[0]?.name || ''"
-                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                            />
-                            <div class="pointer-events-none">
-                                <i
-                                    data-lucide="upload-cloud"
-                                    class="w-12 h-12 mx-auto mb-3 text-gray-400"
-                                ></i>
-                                <p
-                                    class="font-bold text-gray-700"
-                                    x-text="filename || 'Klik atau drag & drop file CSV'"
-                                ></p>
-                                <p
-                                    class="text-xs text-gray-400 mt-1"
-                                    style="
-                                        font-family:
-                                            &quot;Space Mono&quot;, monospace;
-                                    "
-                                >
-                                    Kolom wajib: <strong>text</strong>
-                                </p>
-                            </div>
+            <section id="overview" class="section-block">
+                <div class="section-heading"><div><p class="eyebrow">01 / Ringkasan</p><h2>Kondisi eksperimen</h2></div><span class="section-note">Split 80:20 <span class="note-divider"></span> seed 42</span></div>
+                <div class="kpi-grid">
+                    <article class="kpi-card kpi-valid"><div class="kpi-head"><span>Data valid</span><i data-lucide="rows-3"></i></div><strong>{{ "{:,}".format(dataset.total) }}</strong><small>Dari 3.000 anotasi</small></article>
+                    <article class="kpi-card kpi-split"><div class="kpi-head"><span>Train / test</span><i data-lucide="split"></i></div><strong>{{ "{:,}".format(dataset.train) }} <em>/</em> {{ dataset.test }}</strong><small>Stratified sampling</small></article>
+                    <article class="kpi-card kpi-score"><div class="kpi-head"><span>Macro-F1 terbaik</span><i data-lucide="activity"></i></div><strong>{{ "%.2f"|format(best_model.macro_f1 * 100) }}%</strong><small>{{ best_model.name }}</small></article>
+                    <article class="kpi-card kpi-excluded"><div class="kpi-head"><span>Data dikeluarkan</span><i data-lucide="filter-x"></i></div><strong>{{ "{:,}".format(dataset.excluded) }}</strong><small>Di luar topik / tidak pasti</small></article>
+                </div>
+            </section>
+
+            <section id="analysis" class="section-block">
+                <div class="section-heading"><div><p class="eyebrow">02 / Inferensi</p><h2>Analisis sentimen</h2></div><span class="section-note">Dua model <span class="note-divider"></span> satu input</span></div>
+                <div class="analysis-grid">
+                    <div class="panel input-panel">
+                        <div class="panel-heading"><div><span class="panel-kicker">SUMBER DATA</span><h3>Pilih masukan</h3></div><i data-lucide="sliders-horizontal"></i></div>
+                        <div class="segmented-control" role="tablist" aria-label="Sumber analisis">
+                            <button class="segment active" type="button" role="tab" aria-selected="true" data-tab="text"><i data-lucide="message-square"></i>Komentar</button>
+                            <button class="segment" type="button" role="tab" aria-selected="false" data-tab="csv"><i data-lucide="file-spreadsheet"></i>CSV</button>
+                            <button class="segment" type="button" role="tab" aria-selected="false" data-tab="youtube"><i data-lucide="circle-play"></i>YouTube</button>
                         </div>
+                        <form class="analysis-form" data-analysis-form data-panel="text" action="/analyze/text" method="post">
+                            <label for="sentiment-text">Komentar Coretax</label>
+                            <textarea id="sentiment-text" name="text" rows="5" required placeholder="Contoh: Coretax sering gagal saat saya mencoba login."></textarea>
+                            <div class="form-footer"><span>Satu komentar berbahasa Indonesia</span><button class="primary-button" type="submit"><i data-lucide="sparkles"></i>Analisis</button></div>
+                        </form>
+                        <form class="analysis-form hidden" data-analysis-form data-panel="csv" action="/analyze/csv" method="post" enctype="multipart/form-data">
+                            <label for="csv-file">Dataset komentar</label>
+                            <label class="file-drop" for="csv-file"><i data-lucide="file-up"></i><strong data-file-label>Pilih file CSV</strong><span>Pratinjau dan edit sebelum dianalisis</span></label>
+                            <input id="csv-file" class="visually-hidden" name="file" type="file" accept=".csv,text/csv" required />
+                            <input id="csv-text-column" name="text_column" type="hidden" />
+                            <div class="csv-actions"><button class="secondary-button" id="open-csv-editor" type="button" disabled><i data-lucide="table-2"></i>Lihat &amp; edit CSV</button><span>Maks. 2.000 baris dianalisis</span></div>
+                            <div class="form-footer"><span data-csv-summary>Belum ada file dipilih</span><button class="primary-button" type="submit"><i data-lucide="play"></i>Proses batch</button></div>
+                        </form>
+                        <form class="analysis-form hidden" data-analysis-form data-panel="youtube" action="/analyze/youtube" method="post">
+                            <label for="youtube-keyword">Kata kunci YouTube</label>
+                            <div class="input-with-icon"><i data-lucide="search"></i><input id="youtube-keyword" name="keyword" type="text" required placeholder="Coretax error login" /></div>
+                            <div class="form-footer"><span>Memerlukan YOUTUBE_API_KEY</span><button class="primary-button" type="submit"><i data-lucide="search"></i>Ambil komentar</button></div>
+                        </form>
                     </div>
+                    <div class="panel result-panel">
+                        <div class="panel-heading"><div><span class="panel-kicker">HASIL ANALISIS</span><h3>Perbandingan prediksi</h3></div><span class="live-indicator"><span></span>Siap</span></div>
+                        <div id="result-container" class="empty-result" aria-live="polite"><div class="empty-icon"><i data-lucide="scan-text"></i></div><strong>Belum ada analisis</strong><p>Hasil kedua model akan tampil di sini setelah data diproses.</p></div>
+                    </div>
+                </div>
+            </section>
 
-                    <button
-                        id="analyze-csv-btn"
-                        type="submit"
-                        class="btn btn-black w-full py-4 flex items-center justify-center gap-2 text-base"
-                    >
-                        <i data-lucide="cpu" class="w-5 h-5"></i>
-                        Process Batch Data
-                    </button>
-                </form>
-            </div>
+            <section id="models" class="section-block">
+                <div class="section-heading"><div><p class="eyebrow">03 / Evaluasi</p><h2>Perbandingan model</h2></div><span class="section-note">10-fold cross-validation</span></div>
+                <div class="comparison-spotlight">
+                    <div class="comparison-lead">
+                        <span class="comparison-kicker"><i data-lucide="trophy"></i> Hasil tertinggi sementara</span>
+                        <div class="comparison-result"><strong>{{ "%.2f"|format(best_model.macro_f1 * 100) }}<small>%</small></strong><div><span>Test Macro-F1</span><h3>{{ best_model.name }}</h3></div></div>
+                        <p>Hasil pada data uji eksperimen awal. Bandingkan kedua skenario sebelum menarik kesimpulan akhir.</p>
+                    </div>
+                    <div class="comparison-scores" aria-label="Perbandingan Test Macro-F1">
+                        <span class="comparison-scores-title">Skor pada data uji</span>
+                        {% for model in models %}
+                        <div class="comparison-score {{ 'is-best' if model.name == best_model.name else '' }}">
+                            <div class="comparison-score-label"><strong>{{ model.name }}</strong><span>{{ "%.2f"|format(model.macro_f1 * 100) }}%</span></div>
+                            <div class="comparison-track" role="progressbar" aria-label="Test Macro-F1 {{ model.name }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ "%.2f"|format(model.macro_f1 * 100) }}"><span style="width: {{ "%.2f"|format(model.macro_f1 * 100) }}%"></span></div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="comparison-table-heading"><h3>Rincian metrik</h3><span>Angka persentase dari laporan pelatihan</span></div>
+                <div class="table-panel comparison-table-panel"><div class="table-wrap"><table>
+                    <thead><tr><th scope="col">Model</th><th scope="col">Fitur</th><th scope="col">CV Macro-F1</th><th scope="col">Test accuracy</th><th scope="col">Test Macro-F1</th><th scope="col">Status</th></tr></thead>
+                    <tbody>{% for model in models %}<tr class="{{ 'best-model-row' if model.name == best_model.name else '' }}"><th scope="row"><span class="model-name"><span class="model-mark {{ 'recommended' if model.name == best_model.name else 'mrmr' }}"></span><strong>{{ model.name }}</strong></span></th><td>{{ model.features }}</td><td>{{ "%.2f"|format(model.cv_macro_f1 * 100) }}%</td><td>{{ "%.2f"|format(model.accuracy * 100) }}%</td><td class="key-metric"><strong>{{ "%.2f"|format(model.macro_f1 * 100) }}%</strong></td><td><span class="status-pill {{ 'recommended' if model.name == best_model.name else '' }}">{{ 'Terbaik sementara' if model.name == best_model.name else 'Pembanding' }}</span></td></tr>{% endfor %}</tbody>
+                </table></div></div>
+            </section>
 
-            <!-- Result Container -->
-            <div id="result-container">
-                <!-- Injected by Alpine AJAX -->
-            </div>
+            <section id="dataset" class="section-block">
+                <div class="section-heading"><div><p class="eyebrow">04 / Data penelitian</p><h2>Dataset &amp; fitur</h2></div><span class="section-note">{{ "{:,}".format(dataset.total) }} komentar valid</span></div>
+                <div class="data-grid">
+                    <div class="data-panel distribution-panel"><div class="panel-heading"><div><span class="panel-kicker">KOMPOSISI LABEL</span><h3>Distribusi kelas</h3></div><i data-lucide="chart-pie"></i></div>
+                        <div class="distribution-body"><div class="donut-chart" style="--negative: {{ dataset.distribution[0].percentage }}%; --neutral-end: {{ dataset.distribution[0].percentage + dataset.distribution[1].percentage }}%;"><div><strong>{{ "{:,}".format(dataset.total) }}</strong><span>data valid</span></div></div><div class="distribution-list">{% for item in dataset.distribution %}<div class="distribution-row"><div class="distribution-meta"><span class="legend-dot {{ item.label }}"></span><strong>{{ item.label|capitalize }}</strong><span>{{ item.count }} <em>/</em> {{ item.percentage }}%</span></div><div class="progress-track"><span class="progress-fill {{ item.label }}" style="width: {{ item.percentage }}%"></span></div></div>{% endfor %}</div></div>
+                        <p class="panel-note">Kelas negatif dominan. Macro-F1 digunakan untuk membaca performa tiap kelas secara lebih seimbang.</p>
+                    </div>
+                    <div class="data-panel features-panel"><div class="panel-heading"><div><span class="panel-kicker">SELEKSI FITUR</span><h3>Fitur terpilih mRMR</h3></div><span class="panel-badge">Top 14</span></div><div class="feature-list">{% for feature in features %}<span><b>{{ "%02d"|format(loop.index) }}</b>{{ feature }}</span>{% endfor %}</div><p class="panel-note">Urutan fitur berasal dari model mRMR K=100 pada eksperimen cepat.</p></div>
+                </div>
+            </section>
+            <footer class="page-footer"><span>SenTube <em>/</em> FastAPI <em>/</em> SVM + mRMR</span><span>Data penelitian Coretax</span></footer>
+        </main>
+    </div>
+
+    <dialog id="csv-editor" class="csv-dialog" aria-labelledby="csv-editor-title">
+        <div class="modal-shell">
+            <header class="modal-header"><div><p class="eyebrow">Editor dataset</p><h2 id="csv-editor-title">Pratinjau CSV</h2><p id="csv-modal-filename" class="modal-filename"></p></div><button id="close-csv-editor" class="icon-button" type="button" aria-label="Tutup editor" title="Tutup editor"><i data-lucide="x"></i></button></header>
+            <div class="modal-toolbar"><div class="modal-summary"><strong id="csv-row-count">0 baris</strong><span id="csv-column-count">0 kolom</span></div><div class="modal-tools"><label class="column-picker" for="csv-column-select">Kolom komentar<select id="csv-column-select"></select></label><button id="add-csv-row" class="secondary-button" type="button"><i data-lucide="plus"></i>Tambah baris</button><button id="download-csv" class="secondary-button" type="button"><i data-lucide="download"></i>Unduh CSV</button></div></div>
+            <p id="csv-editor-error" class="editor-error" role="alert" hidden></p>
+            <div class="csv-table-viewport"><table id="csv-editor-table" class="csv-editor-table"><thead></thead><tbody></tbody></table></div>
+            <div class="modal-pagination"><span id="csv-page-label">Halaman 1</span><div><button id="csv-prev-page" class="icon-button" type="button" aria-label="Halaman sebelumnya" title="Halaman sebelumnya"><i data-lucide="chevron-left"></i></button><button id="csv-next-page" class="icon-button" type="button" aria-label="Halaman berikutnya" title="Halaman berikutnya"><i data-lucide="chevron-right"></i></button></div></div>
+            <footer class="modal-footer"><span>Perubahan berlaku saat diterapkan.</span><div><button id="cancel-csv-editor" class="secondary-button" type="button">Batal</button><button id="apply-csv-editor" class="primary-button" type="button"><i data-lucide="check"></i>Terapkan perubahan</button></div></footer>
         </div>
-
-        <!-- Footer -->
-        <footer
-            class="mt-12 text-center text-xs text-gray-400 uppercase tracking-widest"
-            style="font-family: &quot;Space Mono&quot;, monospace"
-        >
-            SVM · mRMR · FastAPI · Alpine AJAX
-        </footer>
-
-        <script>
-            lucide.createIcons();
-        </script>
-    </body>
+    </dialog>
+    <script src="{{ url_for('static', path='/dashboard.js') }}?v=7"></script>
+</body>
 </html>

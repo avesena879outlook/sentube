@@ -1,0 +1,9 @@
+{
+  "name": "sentube-dashboard",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Local CSV editor dependency for the SenTube dashboard",
+  "dependencies": {
+    "papaparse": "5.7.0"
+  }
+}

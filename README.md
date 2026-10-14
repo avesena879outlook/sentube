@@ -2,6 +2,26 @@
 
 Dokumentasi mengenai arsitektur dan organisasi direktori untuk proyek **SenTube**.
 
+## Menjalankan dashboard
+
+```powershell
+uv sync
+uv run uvicorn app.main:app --reload
+```
+
+Buka `http://127.0.0.1:8000`. Dashboard menyediakan analisis satu komentar,
+unggahan CSV, pengambilan komentar YouTube, serta perbandingan prediksi SVM
+baseline dan SVM dengan seleksi fitur mRMR.
+
+Model lokal yang dipakai saat ini adalah `artifacts/svm_baseline_fast.joblib`
+dan `artifacts/svm_mrmr_fast.joblib`. Keduanya masih berstatus preliminary dan
+perlu dilatih ulang setelah adjudikasi label selesai.
+
+Editor CSV pada dashboard memakai Papa Parse 5.7.0. Paket dikunci di
+`package-lock.json`, dan berkas browser-nya disimpan di `static/vendor` agar
+dashboard tetap berjalan tanpa server npm. Setelah memilih CSV, periksa dan
+ubah isinya di modal, pilih kolom komentar, lalu terapkan sebelum memproses batch.
+
 ---
 
 ## 🌳 Pohon Direktori (Directory Tree)

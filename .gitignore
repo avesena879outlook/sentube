@@ -178,3 +178,7 @@ pyrightconfig.json
 # Local smoke-test outputs
 data/processed/*_sample.csv
 data/processed/*_sample_report.json
+
+# Frontend dependency install and npm cache
+node_modules/
+.npm-cache/

@@ -1,0 +1,46 @@
+{
+  "annotations": "data\\processed\\anotasi_ux_coretax_gabungan_3000.csv",
+  "source": "data\\processed\\dataset_coretax_youtube_prelabel_indobert_ringkas.csv",
+  "random_state": 42,
+  "test_size_requested": 0.2,
+  "rows_annotation": 3000,
+  "rows_included": 1844,
+  "rows_excluded": 1156,
+  "excluded_label_counts": {
+    "di_luar_topik": 972,
+    "tidak_pasti": 184
+  },
+  "train_rows": 1475,
+  "test_rows": 369,
+  "actual_test_ratio": 0.200108,
+  "class_distribution_all": {
+    "negatif": 1328,
+    "netral": 412,
+    "positif": 104
+  },
+  "class_distribution_train": {
+    "negatif": 1062,
+    "netral": 330,
+    "positif": 83
+  },
+  "class_distribution_test": {
+    "negatif": 266,
+    "netral": 82,
+    "positif": 21
+  },
+  "included_status_counts": {
+    "belum_diperiksa": 1531,
+    "perlu_adjudikasi": 313
+  },
+  "included_rows_marked_perlu_adjudikasi": 313,
+  "methodology_warning": "Label final dipakai untuk split, tetapi status_anotasi pada sebagian baris masih perlu_adjudikasi. Konfirmasi keputusan final manusia dan ubah status menjadi selesai sebelum eksperimen final dilaporkan.",
+  "train_source_ids_sha256": "fdef10faa3ed8a54583df8b761a1113e38b33d400f06451a87b767a28ba7d10b",
+  "test_source_ids_sha256": "f2afe557a37ad2d9b13ef183c2df8b9f4d9dd0cae40e50aa5e9f2e2f81e20a13",
+  "outputs": {
+    "master": "data\\processed\\comments_labeled.csv",
+    "train": "data\\processed\\comments_labeled_train.csv",
+    "test": "data\\processed\\comments_labeled_test.csv",
+    "excluded": "data\\processed\\comments_excluded.csv",
+    "report": "data\\processed\\train_test_split_report.json"
+  }
+}

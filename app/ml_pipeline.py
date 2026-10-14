@@ -2,7 +2,6 @@ import joblib
 import pandas as pd
 from typing import Dict, Any, List
 from app.config import settings
-from app.preprocessor import clean_text
 
 class SentimentInference:
     def __init__(self):
@@ -17,28 +16,31 @@ class SentimentInference:
                 self.model_a = joblib.load(settings.MODEL_A_PATH)
             if settings.MODEL_B_PATH.exists():
                 self.model_b = joblib.load(settings.MODEL_B_PATH)
-            print("✅ Model A (mRMR) dan Model B (Baseline) berhasil dimuat.")
+            print("Model SVM mRMR dan baseline berhasil dimuat.")
         except Exception as e:
-            print(f"⚠️ Gagal memuat model: {e}")
+            print(f"Gagal memuat model: {e}")
+
+    @property
+    def ready(self) -> bool:
+        return self.model_a is not None and self.model_b is not None
 
     def predict_comparison(self, texts: List[str]) -> Dict[str, Any]:
         """Melakukan prediksi paralel pada kedua model dan menghitung statistik perbandingan."""
-        # Clean data
-        cleaned_texts = [clean_text(t) for t in texts if clean_text(t)]
-        
-        if not cleaned_texts:
+        valid_texts = [str(text).strip() for text in texts if str(text).strip()]
+
+        if not valid_texts:
             return {"error": "Tidak ada teks valid untuk dianalisis."}
 
-        # Prediksi Model A (dengan mRMR)
-        preds_a = self.model_a.predict(cleaned_texts) if self.model_a else ["netral"] * len(cleaned_texts)
-        
-        # Prediksi Model B (Tanpa mRMR)
-        preds_b = self.model_b.predict(cleaned_texts) if self.model_b else ["netral"] * len(cleaned_texts)
+        if not self.ready:
+            return {"error": "Artefak model belum tersedia atau gagal dimuat."}
+
+        # Pipeline artefak sudah memuat preprocessing dan TF-IDF.
+        preds_a = self.model_a.predict(valid_texts)
+        preds_b = self.model_b.predict(valid_texts)
 
         # Buat DataFrame perbandingan
         df_res = pd.DataFrame({
-            "text_raw": texts[:len(cleaned_texts)],
-            "text_clean": cleaned_texts,
+            "text_raw": valid_texts,
             "pred_a_mrmr": preds_a,
             "pred_b_baseline": preds_b,
             "is_different": preds_a != preds_b
@@ -57,7 +59,8 @@ class SentimentInference:
             "difference_pct": difference_pct,
             "summary_a": summary_a,
             "summary_b": summary_b,
-            "details": df_res.to_dict(orient="records")
+            "details": df_res.to_dict(orient="records"),
+            "model_status": "preliminary",
         }
 
 ml_engine = SentimentInference()
